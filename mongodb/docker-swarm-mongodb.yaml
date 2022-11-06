@@ -1,0 +1,72 @@
+version: '3.7'
+networks:
+  mongodb-network:
+volumes:
+  mongodb-primary-data:
+  mongodb-secondaries01-data:
+  mongodb-secondaries02-data:
+  mongodb-secondaries03-data:
+  mongodb-arbiter-data:
+configs:
+  mongod-primary-conf:
+    file: ./mongo-primary.conf
+  mongod-secondaries-conf:
+    file: ./mongo-secondaries.conf
+  mongod-arbiter-conf:
+    file: ./mongo-arbiter.conf
+services:
+  primary:
+    image: mongo
+    #command: mongod --bind_ip_all --replSet=SQ
+    command: mongod --config /etc/mongod.conf
+    volumes:
+      - mongodb-primary-data:/data/db
+    ports:
+      - 27017:27017
+    configs:
+      - source: mongod-primary-conf
+        target: /etc/mongod.conf
+  secondaries01:
+    image: mongo
+    #command: mongod --bind_ip_all --replSet=SQ
+    command: mongod --config /etc/mongod.conf
+    volumes:
+      - mongodb-secondaries01-data:/data/db
+    ports:
+      - 27018:27017
+    configs:
+      - source: mongod-secondaries-conf
+        target: /etc/mongod.conf
+  secondaries02:
+    image: mongo
+    #command: mongod --bind_ip_all --replSet=SQ
+    command: mongod --config /etc/mongod.conf
+    volumes:
+      - mongodb-secondaries02-data:/data/db
+    ports:
+      - 27019:27017
+    configs:
+      - source: mongod-secondaries-conf
+        target: /etc/mongod.conf
+  secondaries03:
+    image: mongo
+    #command: mongod --bind_ip_all --replSet=SQ
+    command: mongod --config /etc/mongod.conf
+    volumes:
+      - mongodb-secondaries03-data:/data/db
+    ports:
+      - 27020:27017
+    configs:
+      - source: mongod-secondaries-conf
+        target: /etc/mongod.conf
+  arbiter:
+    image: mongo
+    #command: mongod --bind_ip_all --replSet=SQ
+    command: mongod --config /etc/mongod.conf
+    volumes:
+      - mongodb-arbiter-data:/data/db
+    ports:
+      - 27021:27017
+    configs:
+      - source: mongod-arbiter-conf
+        target: /etc/mongod.conf

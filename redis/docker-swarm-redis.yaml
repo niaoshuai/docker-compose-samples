@@ -1,0 +1,63 @@
+version: '3.7'
+networks:
+  redis-network:
+volumes:
+  redis-master-data:
+  redis-slave01-data:
+  redis-slave02-data:
+  redis-slave03-data:
+configs:
+  redis-master-conf:
+    file: ./redis-master.conf
+  redis-slave-conf:
+    file: ./redis-slave.conf
+services:
+  master:
+    image: redis
+    command: redis-server /etc/redis/redis.conf
+    volumes:
+      - redis-master-data:/data
+    ports:
+      - 6379:6379
+    configs:
+      - source: redis-master-conf
+        target: /etc/redis/redis.conf
+  slave1:
+    image: redis
+    #restart: always
+    command: redis-server /etc/redis/redis.conf
+    volumes:
+      - redis-slave01-data:/data
+    depends_on:
+      - master
+    ports:
+      - 6380:6379
+    configs:
+      - source: redis-slave-conf
+        target: /etc/redis/redis.conf
+  slave2:
+    image: redis
+    #restart: always
+    command: redis-server /etc/redis/redis.conf
+    volumes:
+      - redis-slave01-data:/data
+    depends_on:
+      - master
+    ports:
+      - 6381:6379
+    configs:
+      - source: redis-slave-conf
+        target: /etc/redis/redis.conf
+  slave3:
+    image: redis
+    #restart: always
+    command: redis-server /etc/redis/redis.conf
+    volumes:
+      - redis-slave01-data:/data
+    depends_on:
+      - master
+    ports:
+      - 6382:6379
+    configs:
+      - source: redis-slave-conf
+        target: /etc/redis/redis.conf

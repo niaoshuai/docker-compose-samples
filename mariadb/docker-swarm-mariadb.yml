@@ -1,0 +1,83 @@
+version: '3'
+networks:
+  mariadb-network:
+volumes:
+  mariadb-master-data:
+  mariadb-slave01-data:
+  mariadb-slave02-data:
+  mariadb-slave03-data:
+configs:
+  mariadb-master-conf:
+    file: ./master.conf
+  mariadb-slave01-conf:
+    file: ./slave1.conf
+  mariadb-slave02-conf:
+    file: ./slave3.conf
+  mariadb-slave03-conf:
+    file: ./slave3.conf
+
+services:
+  mariadb-master:
+    image: mariadb
+    container_name: mariadb-master
+    hostname: mariadb-master
+# restart: always
+    volumes:
+      - mariadb-master-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    ports:
+      - 3306:3306
+    # command:
+    # --lower_case_table_names=1
+    configs:
+      - source: mariadb-master-conf
+        target: /etc/mysql/conf.d/my.cnf
+  mariadb-slave01:
+    image: mariadb
+    container_name: mariadb-slave01
+    hostname: mariadb-slave01
+    # restart: always
+    volumes:    # 挂载
+      - mariadb-slave01-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    ports:
+      - 3307:3306
+    # command:
+    # --lower_case_table_names=1
+    configs:
+      - source: mariadb-slave01-conf
+        target: /etc/mysql/conf.d/my.cnf
+  mariadb-slave02:
+    image: mariadb
+    container_name: mariadb-slave02
+    hostname: mariadb-slave02
+    # restart: always
+    volumes:    # 挂载
+      -mariadb-slave02-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    ports:
+      - 3308:3306
+    # command:
+    # --lower_case_table_names=1
+    configs:
+      - source: mariadb-slave02-conf
+        target: /etc/mysql/conf.d/my.cnf
+  mariadb-slave03:
+    image: mariadb
+    container_name: mariadb-slave03
+    hostname: mariadb-slave03
+    # restart: always
+    volumes:    # 挂载
+      - mariadb-slave03-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    ports:
+      - 3309:3306
+    # command:
+    # --lower_case_table_names=1
+    configs:
+      - source: mariadb-slave03-conf
+        target: /etc/mysql/conf.d/my.cnf

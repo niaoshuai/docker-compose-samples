@@ -1,0 +1,26 @@
+[client]
+# 默认字符集
+default-character-set=utf8mb4
+[mysqld]
+# 字符集
+character-set-server  = utf8mb4
+collation-server      = utf8mb4_general_ci
+# 服务器引擎
+default-storage-engine=InnoDB
+# 表名小写
+#lower_case_table_names=1
+# bin-log
+log-bin=mysql-bin
+server-id=12
+# 同步刷新binlog
+sync_binlog=1
+# 从库日志更新
+log_slave_updates=1
+# 忽略的数据库binlog
+binlog-ignore-db=mysql,information_schema
+# 记录同步信息
+relay-log=slave-relay-bin
+# 设置只读
+read_only=1
+# 到期自动删除
+expire_logs_day=7
