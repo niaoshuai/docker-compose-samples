@@ -8,13 +8,13 @@ volumes:
   mariadb-slave03-data:
 configs:
   mariadb-master-conf:
-    file: ./master.conf
+    file: ./master.cnf
   mariadb-slave01-conf:
-    file: ./slave1.conf
+    file: ./slave1.cnf
   mariadb-slave02-conf:
-    file: ./slave3.conf
+    file: ./slave2.cnf
   mariadb-slave03-conf:
-    file: ./slave3.conf
+    file: ./slave3.cnf
 
 services:
   mariadb-master:
@@ -32,7 +32,7 @@ services:
     # --lower_case_table_names=1
     configs:
       - source: mariadb-master-conf
-        target: /etc/mysql/conf.d/my.cnf
+        target: /etc/mysql/conf.d/server.cnf
   mariadb-slave01:
     image: mariadb
     container_name: mariadb-slave01
@@ -55,7 +55,7 @@ services:
     hostname: mariadb-slave02
     # restart: always
     volumes:    # 挂载
-      -mariadb-slave02-data:/var/lib/mysql
+      - mariadb-slave02-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: 123456
     ports:
