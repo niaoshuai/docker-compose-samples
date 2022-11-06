@@ -45,7 +45,7 @@ services:
     ports:
       - 3307:3306
     # command:
-    # --lower_case_table_names=1
+    # --lower_case_table_names=1`
     configs:
       - source: mariadb-slave01-conf
         target: /etc/mysql/conf.d/my.cnf
