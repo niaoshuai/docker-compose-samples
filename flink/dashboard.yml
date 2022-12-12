@@ -11,8 +11,8 @@ services:
       - TZ=Asia/Shanghai
       - |
         FLINK_PROPERTIES=
-        jobmanager.rpc.address: jobmanager        
-
+        jobmanager.rpc.address: jobmanager
+    restart: always
   taskmanager:
     image: flink:latest
     depends_on:
@@ -26,4 +26,5 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-        taskmanager.numberOfTaskSlots: 2  
+        taskmanager.numberOfTaskSlots: 2
+    restart: always
