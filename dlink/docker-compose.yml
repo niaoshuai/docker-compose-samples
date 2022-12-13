@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  # 配置 dinky 后端服务
+  dinky-server:
+    image: registry.cn-hangzhou.aliyuncs.com/dinky/dinky-standalone-server:0.7.0-flink14
+    volumes:
+#      # 挂载dinky lib/plugins 目录
+      - ./plugins:/opt/dinky/plugins
+    environment:
+      - TZ=Asia/Shanghai
+      - MYSQL_ADDR=dinky-mysql:3306
+    ports:
+      - "18888:8888"
+    depends_on:
+      - dinky-mysql
+    restart: unless-stopped
+
+  # 配置 mysql5.7 数据库
+  dinky-mysql:
+    image: registry.cn-hangzhou.aliyuncs.com/dinky/dinky-mysql-server:0.7.0
+    container_name: dinky-mysql
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+       # 挂载dinky lib/plugins 目录
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  mysql-data:

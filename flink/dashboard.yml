@@ -1,12 +1,15 @@
 version: "2.2"
+
 services:
   jobmanager:
-    image: flink:latest
+    image: flink:1.14.5
     ports:
       - "8081:8081"
     command: jobmanager
     volumes:
      - '/etc/localtime:/etc/localtime'
+     - './lib:/opt/flink/lib'
+     - 'flink-log:/opt/flink/log'
     environment:
       - TZ=Asia/Shanghai
       - |
@@ -14,13 +17,15 @@ services:
         jobmanager.rpc.address: jobmanager
     restart: always
   taskmanager:
-    image: flink:latest
+    image: flink:1.14.5
     depends_on:
       - jobmanager
     command: taskmanager
     scale: 1
     volumes:
      - '/etc/localtime:/etc/localtime'
+     - './lib:/opt/flink/lib'
+     - 'flink-log:/opt/flink/log'
     environment:
       - TZ=Asia/Shanghai
       - |
@@ -28,3 +33,5 @@ services:
         jobmanager.rpc.address: jobmanager
         taskmanager.numberOfTaskSlots: 2
     restart: always
+volumes:
+  flink-log:
